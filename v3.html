@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'terminal': '#0D1117',
+                        'terminal-light': '#161B22',
+                        'neon': '#00FF41',
+                        'neon-dim': '#00802B',
+                        'cyber': '#0AFFFF',
+                        'cyber-dim': '#008B8B',
+                        'danger': '#FF073A',
+                        'warning': '#FFCC00'
+                    },
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'Consolas', 'Monaco', 'monospace'],
+                        'glitch': ['VT323', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #0D1117;
+            color: #E6E6E6;
+        }
+        
+        /* Terminal effect */
+        .terminal-text {
+            position: relative;
+            color: #00FF41;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #00FF41;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #00FF41 }
+        }
+        
+        /* Matrix rain effect */
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .matrix-column {
+            position: absolute;
+            top: -100px;
+            color: #00FF41;
+            font-size: 1.5rem;
+            animation: fall linear infinite;
+            text-shadow: 0 0 5px #00FF41;
+            opacity: 0.8;
+        }
+        
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+        
+        /* Glitch effect */
+        .glitch {
+            position: relative;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -1px 0 #FF073A;
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+            clip: rect(44px, 450px, 56px, 0);
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: -1px 0 #0AFFFF;
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+            clip: rect(24px, 450px, 36px, 0);
+        }
+        
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(24px, 450px, 34px, 0); }
+            20% { clip: rect(62px, 450px, 84px, 0); }
+            40% { clip: rect(12px, 450px, 22px, 0); }
+            60% { clip: rect(54px, 450px, 73px, 0); }
+            80% { clip: rect(31px, 450px, 49px, 0); }
+            100% { clip: rect(16px, 450px, 29px, 0); }
+        }
+        
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(34px, 450px, 44px, 0); }
+            20% { clip: rect(12px, 450px, 24px, 0); }
+            40% { clip: rect(62px, 450px, 74px, 0); }
+            60% { clip: rect(22px, 450px, 33px, 0); }
+            80% { clip: rect(59px, 450px, 69px, 0); }
+            100% { clip: rect(41px, 450px, 53px, 0); }
+        }
+        
+        /* Skill bar animation */
+        .skill-bar {
+            position: relative;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(0, 255, 65, 0.2);
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: #00FF41;
+            animation: progress-animation 1.5s ease-out forwards;
+            transform-origin: left;
+            transform: scaleX(0);
+        }
+        
+        @keyframes progress-animation {
+            to { transform: scaleX(1); }
+        }
+        
+        /* Hacker card effect */
+        .hacker-card {
+            background: #161B22;
+            border: 1px solid #30363D;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hacker-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transition: 0.5s;
+        }
+        
+        .hacker-card:hover::before {
+            left: 100%;
+        }
+        
+        .hacker-card:hover {
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+            transform: translateY(-5px);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0D1117;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #00FF41;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00802B;
+        }
+        
+        /* Theme toggle button */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            background-color: #161B22;
+            border: 1px solid #30363D;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: #00FF41;
+            transition: all 0.3s ease;
+        }
+        
+        .light .theme-toggle {
+            background-color: #E5E7EB;
+        }
+        
+        .light .theme-toggle::after {
+            transform: translateX(30px);
+            background-color: #4F46E5;
+        }
+        
+        /* Binary background */
+        .binary {
+            position: absolute;
+            color: rgba(0, 255, 65, 0.1);
+            font-size: 10px;
+            z-index: -1;
+            user-select: none;
+        }
+        
+        /* Console typing effect */
+        .console-typing::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+            from, to { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        /* Project card hover effect */
+        .project-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #30363D;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+        
+        /* Animated underline for links */
+        .nav-link {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #00FF41;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .active::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-terminal text-gray-300">
+    <!-- Binary Background -->
+    <div id="binary-background" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-terminal-light border-b border-gray-800 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-neon font-mono flex items-center">
+                <span class="mr-2">&lt;</span>
+                <span class="glitch" data-text="0xHacker">0xHacker</span>
+                <span class="ml-2">/&gt;</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="nav-link text-gray-400 hover:text-neon transition duration-300">~/home</a>
+                <a href="#about" class="nav-link text-gray-400 hover:text-neon transition duration-300">~/about</a>
+                <a href="#skills" class="nav-link text-gray-400 hover:text-neon transition duration-300">~/skills</a>
+                <a href="#projects" class="nav-link text-gray-400 hover:text-neon transition duration-300">~/projects</a>
+                <a href="#contact" class="nav-link text-gray-400 hover:text-neon transition duration-300">~/contact</a>
+                
+                <!-- Theme Toggle Button -->
+                <div id="theme-toggle" class="theme-toggle ml-4">
+                    <i class="fas fa-sun text-yellow-300 absolute top-1.5 left-1.5 text-xs opacity-0"></i>
+                    <i class="fas fa-moon text-gray-400 absolute top-1.5 right-1.5 text-xs"></i>
+                </div>
+            </div>
+            
+            <button id="mobile-menu-button" class="md:hidden text-gray-400 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-terminal-light border-t border-gray-800 absolute w-full">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#home" class="py-2 text-gray-400 hover:text-neon transition duration-300">~/home</a>
+                <a href="#about" class="py-2 text-gray-400 hover:text-neon transition duration-300">~/about</a>
+                <a href="#skills" class="py-2 text-gray-400 hover:text-neon transition duration-300">~/skills</a>
+                <a href="#projects" class="py-2 text-gray-400 hover:text-neon transition duration-300">~/projects</a>
+                <a href="#contact" class="py-2 text-gray-400 hover:text-neon transition duration-300">~/contact</a>
+                
+                <!-- Mobile Theme Toggle -->
+                <div class="flex items-center">
+                    <span class="text-gray-400 mr-3">Toggle Theme:</span>
+                    <div id="mobile-theme-toggle" class="theme-toggle">
+                        <i class="fas fa-sun text-yellow-300 absolute top-1.5 left-1.5 text-xs opacity-0"></i>
+                        <i class="fas fa-moon text-gray-400 absolute top-1.5 right-1.5 text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center pt-16 relative overflow-hidden">
+        <div class="container mx-auto px-4 py-16 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 text-center md:text-left">
+                    <div class="mb-4 inline-block px-4 py-1 border border-neon text-neon text-sm font-mono">
+                        <span class="mr-2">$</span>whoami
+                    </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-mono">
+                        <span class="text-white">I'm </span>
+                        <span class="text-neon terminal-text">Alex</span>
+                    </h1>
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-light mb-6 font-mono text-cyber">
+                        Backend Developer & Security Specialist
+                    </h2>
+                    <p class="text-lg md:text-xl mb-8 text-gray-400 font-mono">
+                        <span class="console-typing" id="console-text"></span>
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#projects" class="bg-transparent border-2 border-neon text-neon hover:bg-neon hover:bg-opacity-10 px-8 py-3 rounded-none font-mono transition duration-300 text-center flex items-center justify-center">
+                            <span class="mr-2">&lt;/&gt;</span> View My Work
+                        </a>
+                        <a href="#contact" class="bg-transparent border-2 border-cyber text-cyber hover:bg-cyber hover:bg-opacity-10 px-8 py-3 rounded-none font-mono transition duration-300 text-center flex items-center justify-center">
+                            <span class="mr-2">$</span> Contact Me
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 mt-12 md:mt-0 flex justify-center">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 border-2 border-neon p-1">
+                        <div class="absolute inset-0 bg-terminal-light flex items-center justify-center overflow-hidden">
+                            <!-- ASCII Art Avatar -->
+                            <pre class="text-neon text-xs md:text-sm leading-none font-mono">
+                                <code>
+                                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣾⣿⣿⡿⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀
+                                    ⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⡟⠁⣰⣿⣿⣿⡿⠿⠻⠿⣿⣿⣿⣿⣧⠀⠀⠀⠀
+                                    ⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⠏⠀⣴⣿⣿⣿⠉⠀⠀⠀⠀⠀⠈⢻⣿⣿⣇⠀⠀⠀
+                                    ⠀⠀⠀⠀⢀⣠⣼⣿⣿⡏⠀⢠⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⡀⠀⠀
+                                    ⠀⠀⠀⣰⣿⣿⣿⣿⣿⡇⠀⢸⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⡇⠀⠀
+                                    ⠀⠀⢰⣿⣿⡿⣿⣿⣿⡇⠀⠘⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⢀⣸⣿⣿⣿⠁⠀⠀
+                                    ⠀⠀⣿⣿⣿⠁⣿⣿⣿⡇⠀⠀⠻⣿⣿⣿⣷⣶⣶⣶⣶⣶⣿⣿⣿⣿⠃⠀⠀⠀
+                                    ⠀⢰⣿⣿⡇⠀⣿⣿⣿⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠁⠀⠀⠀⠀
+                                    ⠀⢸⣿⣿⡇⠀⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠉⠛⠛⠛⠉⢉⣿⣿⠀⠀⠀⠀⠀⠀
+                                    ⠀⢸⣿⣿⣇⠀⣿⣿⣿⠀⠀⠀⠀⠀⢀⣤⣤⣤⡀⠀⠀⢸⣿⣿⣿⣷⣦⠀⠀⠀
+                                    ⠀⠀⢻⣿⣿⣶⣿⣿⣿⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣦⡀⠀⠉⠉⠻⣿⣿⡇⠀⠀
+                                    ⠀⠀⠀⠛⠿⣿⣿⣿⣿⣷⣤⡀⠀⠀⠀⠀⠈⠹⣿⣿⣇⣀⠀⣠⣾⣿⣿⡇⠀⠀
+                                    ⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣦⣤⣤⣤⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠀
+                                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⣿⠿⠋⠉⠛⠋⠉⠉⠁⠀⠀⠀⠀
+                                </code>
+                            </pre>
+                            
+                            <!-- Animated Terminal Lines -->
+                            <div class="absolute bottom-0 left-0 right-0 p-2 text-xs text-neon font-mono">
+                                <div id="terminal-lines"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Corner Decorations -->
+                        <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-neon"></div>
+                        <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-neon"></div>
+                        <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-neon"></div>
+                        <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-neon"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-terminal-light border-t border-gray-800 py-4">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-wrap justify-between items-center text-sm font-mono">
+                    <div class="flex items-center mb-2 md:mb-0">
+                        <div class="w-3 h-3 rounded-full bg-neon mr-2 pulse-animation"></div>
+                        <span class="text-gray-400">Status: <span class="text-neon">Online</span></span>
+                    </div>
+                    <div class="flex items-center mb-2 md:mb-0">
+                        <i class="fas fa-server text-cyber mr-2"></i>
+                        <span class="text-gray-400">Server: <span class="text-cyber">Operational</span></span>
+                    </div>
+                    <div class="flex items-center mb-2 md:mb-0">
+                        <i class="fas fa-database text-warning mr-2"></i>
+                        <span class="text-gray-400">Database: <span class="text-warning">Connected</span></span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt text-danger mr-2"></i>
+                        <span class="text-gray-400">Security: <span class="text-danger">Maximum</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-terminal-light relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 border border-neon text-neon text-sm font-mono mb-4">
+                    <span class="mr-2">$</span>cat about.txt
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 font-mono">About Me</h2>
+                <div class="w-24 h-1 bg-neon mx-auto"></div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <div class="relative border-2 border-neon p-4 mx-auto max-w-md">
+                        <!-- Terminal Window -->
+                        <div class="bg-terminal rounded-none overflow-hidden">
+                            <!-- Terminal Header -->
+                            <div class="bg-gray-800 px-4 py-2 flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-danger mr-2"></div>
+                                <div class="w-3 h-3 rounded-full bg-warning mr-2"></div>
+                                <div class="w-3 h-3 rounded-full bg-neon mr-2"></div>
+                                <div class="text-gray-400 text-xs font-mono ml-2">user@hackermachine: ~/profile</div>
+                            </div>
+                            
+                            <!-- Terminal Content -->
+                            <div class="p-4 font-mono text-sm">
+                                <div class="mb-2">
+                                    <span class="text-neon">$</span>
+                                    <span class="text-gray-300"> whoami</span>
+                                </div>
+                                <div class="mb-4 text-neon">alex_hacker</div>
+                                
+                                <div class="mb-2">
+                                    <span class="text-neon">$</span>
+                                    <span class="text-gray-300"> cat skills.txt</span>
+                                </div>
+                                <div class="mb-4 text-cyber">Backend Development, Database Architecture, Network Security, Penetration Testing</div>
+                                
+                                <div class="mb-2">
+                                    <span class="text-neon">$</span>
+                                    <span class="text-gray-300"> cat experience.txt</span>
+                                </div>
+                                <div class="mb-4 text-warning">7+ years of experience in secure systems development</div>
+                                
+                                <div class="mb-2">
+                                    <span class="text-neon">$</span>
+                                    <span class="text-gray-300"> cat location.txt</span>
+                                </div>
+                                <div class="mb-4 text-danger">San Francisco, CA</div>
+                                
+                                <div>
+                                    <span class="text-neon">$</span>
+                                    <span class="text-gray-300 console-typing"> _</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Corner Decorations -->
+                        <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-neon"></div>
+                        <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-neon"></div>
+                        <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-neon"></div>
+                        <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-neon"></div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 md:pl-10">
+                    <h3 class="text-2xl font-bold text-neon mb-6 font-mono">Backend Developer & Security Specialist</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed font-mono">
+                        I'm a passionate backend developer with a focus on building secure, scalable systems. 
+                        With over 7 years of experience in the cybersecurity field, I specialize in developing 
+                        robust backend architectures, optimizing database performance, and implementing 
+                        comprehensive security measures.
+                    </p>
+                    <p class="text-gray-400 mb-8 leading-relaxed font-mono">
+                        My approach combines deep technical knowledge with practical security expertise, 
+                        allowing me to create systems that are not only functional but also resistant to 
+                        modern cyber threats. I believe in building technology that respects user privacy 
+                        and maintains data integrity at all costs.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="border border-gray-800 p-4">
+                            <h4 class="text-cyber font-bold mb-2 font-mono">Backend</h4>
+                            <p class="text-gray-400 font-mono">Node.js, Python, Go, Java, Microservices</p>
+                        </div>
+                        <div class="border border-gray-800 p-4">
+                            <h4 class="text-cyber font-bold mb-2 font-mono">Database</h4>
+                            <p class="text-gray-400 font-mono">PostgreSQL, MongoDB, Redis, Elasticsearch</p>
+                        </div>
+                        <div class="border border-gray-800 p-4">
+                            <h4 class="text-cyber font-bold mb-2 font-mono">DevOps</h4>
+                            <p class="text-gray-400 font-mono">Docker, Kubernetes, CI/CD, AWS, Linux</p>
+                        </div>
+                        <div class="border border-gray-800 p-4">
+                            <h4 class="text-cyber font-bold mb-2 font-mono">Security</h4>
+                            <p class="text-gray-400 font-mono">Penetration Testing, OWASP, Encryption</p>
+                        </div>
+                    </div>
+                    
+                    <a href="#contact" class="inline-block bg-transparent border-2 border-neon text-neon hover:bg-neon hover:bg-opacity-10 px-8 py-3 font-mono transition duration-300">
+                        <span class="mr-2">$</span>Contact Me
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-terminal relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 border border-neon text-neon text-sm font-mono mb-4">
+                    <span class="mr-2">$</span>ls -la skills/
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 font-mono">Technical Skills</h2>
+                <div class="w-24 h-1 bg-neon mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Backend Skills -->
+                <div class="border border-gray-800 p-6">
+                    <h3 class="text-2xl font-bold text-neon mb-6 font-mono flex items-center">
+                        <i class="fas fa-server mr-3"></i>
+                        Backend Development
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Node.js / Express</span>
+                                <span class="text-neon font-mono">95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Python / Django / Flask</span>
+                                <span class="text-neon font-mono">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Go</span>
+                                <span class="text-neon font-mono">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Java / Spring Boot</span>
+                                <span class="text-neon font-mono">80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Microservices Architecture</span>
+                                <span class="text-neon font-mono">92%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Database Skills -->
+                <div class="border border-gray-800 p-6">
+                    <h3 class="text-2xl font-bold text-cyber mb-6 font-mono flex items-center">
+                        <i class="fas fa-database mr-3"></i>
+                        Database Systems
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">PostgreSQL</span>
+                                <span class="text-cyber font-mono">96%</span>
+                            </div>
+                            <div class="skill-bar bg-cyber bg-opacity-20">
+                                <div class="skill-progress bg-cyber" style="width: 96%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">MongoDB</span>
+                                <span class="text-cyber font-mono">92%</span>
+                            </div>
+                            <div class="skill-bar bg-cyber bg-opacity-20">
+                                <div class="skill-progress bg-cyber" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Redis</span>
+                                <span class="text-cyber font-mono">88%</span>
+                            </div>
+                            <div class="skill-bar bg-cyber bg-opacity-20">
+                                <div class="skill-progress bg-cyber" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Elasticsearch</span>
+                                <span class="text-cyber font-mono">85%</span>
+                            </div>
+                            <div class="skill-bar bg-cyber bg-opacity-20">
+                                <div class="skill-progress bg-cyber" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">SQL Query Optimization</span>
+                                <span class="text-cyber font-mono">94%</span>
+                            </div>
+                            <div class="skill-bar bg-cyber bg-opacity-20">
+                                <div class="skill-progress bg-cyber" style="width: 94%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DevOps Skills -->
+                <div class="border border-gray-800 p-6">
+                    <h3 class="text-2xl font-bold text-warning mb-6 font-mono flex items-center">
+                        <i class="fas fa-network-wired mr-3"></i>
+                        DevOps & Infrastructure
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Docker / Containerization</span>
+                                <span class="text-warning font-mono">95%</span>
+                            </div>
+                            <div class="skill-bar bg-warning bg-opacity-20">
+                                <div class="skill-progress bg-warning" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Kubernetes</span>
+                                <span class="text-warning font-mono">88%</span>
+                            </div>
+                            <div class="skill-bar bg-warning bg-opacity-20">
+                                <div class="skill-progress bg-warning" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">CI/CD Pipelines</span>
+                                <span class="text-warning font-mono">90%</span>
+                            </div>
+                            <div class="skill-bar bg-warning bg-opacity-20">
+                                <div class="skill-progress bg-warning" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">AWS / Cloud Services</span>
+                                <span class="text-warning font-mono">92%</span>
+                            </div>
+                            <div class="skill-bar bg-warning bg-opacity-20">
+                                <div class="skill-progress bg-warning" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Linux Administration</span>
+                                <span class="text-warning font-mono">94%</span>
+                            </div>
+                            <div class="skill-bar bg-warning bg-opacity-20">
+                                <div class="skill-progress bg-warning" style="width: 94%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Security Skills -->
+                <div class="border border-gray-800 p-6">
+                    <h3 class="text-2xl font-bold text-danger mb-6 font-mono flex items-center">
+                        <i class="fas fa-shield-alt mr-3"></i>
+                        Security & Networking
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Penetration Testing</span>
+                                <span class="text-danger font-mono">93%</span>
+                            </div>
+                            <div class="skill-bar bg-danger bg-opacity-20">
+                                <div class="skill-progress bg-danger" style="width: 93%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">OWASP Security Practices</span>
+                                <span class="text-danger font-mono">96%</span>
+                            </div>
+                            <div class="skill-bar bg-danger bg-opacity-20">
+                                <div class="skill-progress bg-danger" style="width: 96%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Network Security</span>
+                                <span class="text-danger font-mono">90%</span>
+                            </div>
+                            <div class="skill-bar bg-danger bg-opacity-20">
+                                <div class="skill-progress bg-danger" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Encryption / Cryptography</span>
+                                <span class="text-danger font-mono">89%</span>
+                            </div>
+                            <div class="skill-bar bg-danger bg-opacity-20">
+                                <div class="skill-progress bg-danger" style="width: 89%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-mono">Secure Coding Practices</span>
+                                <span class="text-danger font-mono">95%</span>
+                            </div>
+                            <div class="skill-bar bg-danger bg-opacity-20">
+                                <div class="skill-progress bg-danger" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Skills -->
+            <div class="mt-12 border border-gray-800 p-6">
+                <h3 class="text-xl font-bold text-white mb-6 font-mono">Additional Technical Skills</h3>
+                
+                <div class="flex flex-wrap gap-3">
+                    <span class="bg-terminal-light border border-neon text-neon px-3 py-1 font-mono">RESTful APIs</span>
+                    <span class="bg-terminal-light border border-neon text-neon px-3 py-1 font-mono">GraphQL</span>
+                    <span class="bg-terminal-light border border-cyber text-cyber px-3 py-1 font-mono">WebSockets</span>
+                    <span class="bg-terminal-light border border-cyber text-cyber px-3 py-1 font-mono">gRPC</span>
+                    <span class="bg-terminal-light border border-warning text-warning px-3 py-1 font-mono">Terraform</span>
+                    <span class="bg-terminal-light border border-warning text-warning px-3 py-1 font-mono">Ansible</span>
+                    <span class="bg-terminal-light border border-danger text-danger px-3 py-1 font-mono">OAuth/JWT</span>
+                    <span class="bg-terminal-light border border-danger text-danger px-3 py-1 font-mono">Firewall Config</span>
+                    <span class="bg-terminal-light border border-neon text-neon px-3 py-1 font-mono">Message Queues</span>
+                    <span class="bg-terminal-light border border-cyber text-cyber px-3 py-1 font-mono">Data Modeling</span>
+                    <span class="bg-terminal-light border border-warning text-warning px-3 py-1 font-mono">Load Balancing</span>
+                    <span class="bg-terminal-light border border-danger text-danger px-3 py-1 font-mono">Vulnerability Assessment</span>
+                    <span class="bg-terminal-light border border-neon text-neon px-3 py-1 font-mono">API Gateway</span>
+                    <span class="bg-terminal-light border border-cyber text-cyber px-3 py-1 font-mono">Database Sharding</span>
+                    <span class="bg-terminal-light border border-warning text-warning px-3 py-1 font-mono">Service Mesh</span>
+                    <span class="bg-terminal-light border border-danger text-danger px-3 py-1 font-mono">Intrusion Detection</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-terminal-light relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 border border-neon text-neon text-sm font-mono mb-4">
+                    <span class="mr-2">$</span>ls -la projects/
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 font-mono">Featured Projects</h2>
+                <div class="w-24 h-1 bg-neon mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="project-card bg-terminal rounded-none overflow-hidden">
+                    <div class="h-56 bg-terminal flex items-center justify-center relative overflow-hidden">
+                        <!-- Project Visual -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-shield-alt text-6xl text-neon mb-4"></i>
+                                <div class="text-neon font-mono text-lg">SecureAuth</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Code Overlay -->
+                        <div class="absolute inset-0 bg-terminal bg-opacity-80 opacity-20 hover:opacity-80 transition-opacity duration-300 flex items-center justify-center p-4">
+                            <pre class="text-neon text-xs overflow-hidden font-mono">
+<code>function verifyToken(token) {
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+    return { valid: true, data: decoded };
+  } catch (err) {
+    return { 
+      valid: false, 
+      error: err.message 
+    };
+  }
+}</code>
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="p-6 border-t border-gray-800">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-xl font-bold text-neon font-mono">SecureAuth System</h3>
+                            <div class="flex space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-neon"></span>
+                                <span class="w-3 h-3 rounded-full bg-cyber"></span>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 mb-4 font-mono text-sm">A robust authentication system with multi-factor auth, JWT implementation, and brute force protection.</p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-terminal border border-neon text-neon text-xs px-2 py-1 font-mono">Node.js</span>
+                            <span class="bg-terminal border border-neon text-neon text-xs px-2 py-1 font-mono">Express</span>
+                            <span class="bg-terminal border border-cyber text-cyber text-xs px-2 py-1 font-mono">MongoDB</span>
+                            <span class="bg-terminal border border-danger text-danger text-xs px-2 py-1 font-mono">JWT</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <button class="text-neon hover:text-white font-mono flex items-center transition group">
+                                View Project
+                                <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </button>
+                            <a href="#" class="text-gray-400 hover:text-neon">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-card bg-terminal rounded-none overflow-hidden">
+                    <div class="h-56 bg-terminal flex items-center justify-center relative overflow-hidden">
+                        <!-- Project Visual -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-database text-6xl text-cyber mb-4"></i>
+                                <div class="text-cyber font-mono text-lg">DataVault</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Code Overlay -->
+                        <div class="absolute inset-0 bg-terminal bg-opacity-80 opacity-20 hover:opacity-80 transition-opacity duration-300 flex items-center justify-center p-4">
+                            <pre class="text-cyber text-xs overflow-hidden font-mono">
+<code>async function optimizeQuery(query) {
+  const plan = await db.explain(query);
+  
+  if (plan.executionStats.totalDocsExamined > 
+      plan.executionStats.nReturned * 10) {
+    return createIndex(
+      plan.queryPlanner.winningPlan.inputStage.keyPattern
+    );
+  }
+  
+  return plan;
+}</code>
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="p-6 border-t border-gray-800">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-xl font-bold text-cyber font-mono">DataVault</h3>
+                            <div class="flex space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-cyber"></span>
+                                <span class="w-3 h-3 rounded-full bg-warning"></span>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 mb-4 font-mono text-sm">High-performance database system with automatic query optimization, sharding, and encrypted data storage.</p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-terminal border border-cyber text-cyber text-xs px-2 py-1 font-mono">PostgreSQL</span>
+                            <span class="bg-terminal border border-cyber text-cyber text-xs px-2 py-1 font-mono">Redis</span>
+                            <span class="bg-terminal border border-warning text-warning text-xs px-2 py-1 font-mono">Docker</span>
+                            <span class="bg-terminal border border-danger text-danger text-xs px-2 py-1 font-mono">Encryption</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <button class="text-cyber hover:text-white font-mono flex items-center transition group">
+                                View Project
+                                <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </button>
+                            <a href="#" class="text-gray-400 hover:text-cyber">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-card bg-terminal rounded-none overflow-hidden">
+                    <div class="h-56 bg-terminal flex items-center justify-center relative overflow-hidden">
+                        <!-- Project Visual -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-network-wired text-6xl text-warning mb-4"></i>
+                                <div class="text-warning font-mono text-lg">NetGuardian</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Code Overlay -->
+                        <div class="absolute inset-0 bg-terminal bg-opacity-80 opacity-20 hover:opacity-80 transition-opacity duration-300 flex items-center justify-center p-4">
+                            <pre class="text-warning text-xs overflow-hidden font-mono">
+<code>class PacketAnalyzer {
+  constructor(interface) {
+    this.interface = interface;
+    this.anomalyDetector = new AnomalyDetector();
+    this.signatures = loadSignatures();
+  }
+  
+  async analyze(packet) {
+    const fingerprint = createFingerprint(packet);
+    const threat = this.signatures.match(fingerprint);
+    
+    if (threat || this.anomalyDetector.isAnomaly(packet)) {
+      await this.blockSource(packet.source);
+      return true;
+    }
+    
+    return false;
+  }
+}</code>
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="p-6 border-t border-gray-800">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-xl font-bold text-warning font-mono">NetGuardian</h3>
+                            <div class="flex space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-warning"></span>
+                                <span class="w-3 h-3 rounded-full bg-danger"></span>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 mb-4 font-mono text-sm">Network intrusion detection system with real-time traffic analysis and automated threat response.</p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-terminal border border-warning text-warning text-xs px-2 py-1 font-mono">Python</span>
+                            <span class="bg-terminal border border-neon text-neon text-xs px-2 py-1 font-mono">Go</span>
+                            <span class="bg-terminal border border-danger text-danger text-xs px-2 py-1 font-mono">Firewall</span>
+                            <span class="bg-terminal border border-cyber text-cyber text-xs px-2 py-1 font-mono">ML</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <button class="text-warning hover:text-white font-mono flex items-center transition group">
+                                View Project
+                                <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </button>
+                            <a href="#" class="text-gray-400 hover:text-warning">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button id="load-more" class="bg-transparent border-2 border-neon text-neon hover:bg-neon hover:bg-opacity-10 px-8 py-3 font-mono transition duration-300">
+                    <span class="mr-2">$</span>load --more projects
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-terminal relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1 border border-neon text-neon text-sm font-mono mb-4">
+                    <span class="mr-2">$</span>ssh user@contact
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 font-mono">Get In Touch</h2>
+                <div class="w-24 h-1 bg-neon mx-auto"></div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-10">
+                <div class="md:w-1/3">
+                    <div class="bg-terminal-light border border-gray-800 p-6">
+                        <h3 class="text-xl font-bold text-white mb-6 font-mono">Contact Information</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="bg-terminal p-3 border border-neon mr-4">
+                                    <i class="fas fa-envelope text-neon"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-gray-300 font-medium font-mono">Email</h4>
+                                    <p class="text-neon font-mono">alex@hackerdomain.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-terminal p-3 border border-cyber mr-4">
+                                    <i class="fas fa-map-marker-alt text-cyber"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-gray-300 font-medium font-mono">Location</h4>
+                                    <p class="text-cyber font-mono">San Francisco, CA</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-terminal p-3 border border-warning mr-4">
+                                    <i class="fas fa-key text-warning"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-gray-300 font-medium font-mono">PGP Key</h4>
+                                    <p class="text-warning font-mono text-sm">0xAB42DE...F7</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="text-gray-300 font-medium mb-4 font-mono">Connect</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="bg-terminal p-3 border border-neon text-neon hover:bg-neon hover:bg-opacity-10 transition">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="#" class="bg-terminal p-3 border border-cyber text-cyber hover:bg-cyber hover:bg-opacity-10 transition">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="bg-terminal p-3 border border-warning text-warning hover:bg-warning hover:bg-opacity-10 transition">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="bg-terminal p-3 border border-danger text-danger hover:bg-danger hover:bg-opacity-10 transition">
+                                    <i class="fab fa-stack-overflow"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-2/3">
+                    <div class="bg-terminal-light border border-gray-800 p-6">
+                        <h3 class="text-xl font-bold text-white mb-6 font-mono">Send Message</h3>
+                        
+                        <form id="contact-form" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="name" class="block text-gray-300 font-medium mb-2 font-mono">Name</label>
+                                    <input type="text" id="name" class="w-full bg-terminal border border-gray-800 focus:border-neon text-white px-4 py-3 font-mono" placeholder="_">
+                                </div>
+                                
+                                <div>
+                                    <label for="email" class="block text-gray-300 font-medium mb-2 font-mono">Email</label>
+                                    <input type="email" id="email" class="w-full bg-terminal border border-gray-800 focus:border-neon text-white px-4 py-3 font-mono" placeholder="_">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="subject" class="block text-gray-300 font-medium mb-2 font-mono">Subject</label>
+                                <input type="text" id="subject" class="w-full bg-terminal border border-gray-800 focus:border-neon text-white px-4 py-3 font-mono" placeholder="_">
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-gray-300 font-medium mb-2 font-mono">Message</label>
+                                <textarea id="message" rows="5" class="w-full bg-terminal border border-gray-800 focus:border-neon text-white px-4 py-3 font-mono" placeholder="_"></textarea>
+                            </div>
+                            
+                            <div>
+                                <button type="submit" class="w-full bg-transparent border-2 border-neon text-neon hover:bg-neon hover:bg-opacity-10 px-6 py-3 font-mono transition duration-300 flex items-center justify-center">
+                                    <span class="mr-2">$</span>send --message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-terminal-light border-t border-gray-800 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="#" class="text-2xl font-bold text-neon font-mono flex items-center">
+                        <span class="mr-2">&lt;</span>
+                        0xHacker
+                        <span class="ml-2">/&gt;</span>
+                    </a>
+                    <p class="mt-2 text-gray-500 font-mono">Building secure systems in the digital realm.</p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-6 font-mono">
+                    <a href="#home" class="text-gray-400 hover:text-neon transition">~/home</a>
+                    <a href="#about" class="text-gray-400 hover:text-neon transition">~/about</a>
+                    <a href="#skills" class="text-gray-400 hover:text-neon transition">~/skills</a>
+                    <a href="#projects" class="text-gray-400 hover:text-neon transition">~/projects</a>
+                    <a href="#contact" class="text-gray-400 hover:text-neon transition">~/contact</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 font-mono">
+                <p>&copy; 2023 | <span class="text-neon">0xHacker</span> | All rights reserved.</p>
+                <p class="mt-2 text-xs">This site is protected by multiple layers of encryption and monitoring systems.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-neon text-terminal w-12 h-12 flex items-center justify-center border-2 border-neon opacity-0 invisible transition-all duration-300">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
+    </button>
+
+    <script>
+        // Generate Binary Background
+        function generateBinaryBackground() {
+            const container = document.getElementById('binary-background');
+            const containerWidth = window.innerWidth;
+            const containerHeight = window.innerHeight;
+            
+            // Clear previous binary
+            container.innerHTML = '';
+            
+            // Create binary elements
+            for (let i = 0; i < 50; i++) {
+                const binary = document.createElement('div');
+                binary.classList.add('binary');
+                binary.style.left = `${Math.random() * containerWidth}px`;
+                binary.style.top = `${Math.random() * containerHeight}px`;
+                binary.textContent = Math.random() > 0.5 ? '1' : '0';
+                container.appendChild(binary);
+            }
+        }
+        
+        // Generate Matrix Rain
+        function createMatrixRain() {
+            const container = document.createElement('div');
+            container.classList.add('matrix-bg');
+            document.body.appendChild(container);
+            
+            const width = window.innerWidth;
+            
+            for (let i = 0; i < 30; i++) {
+                const column = document.createElement('div');
+                column.classList.add('matrix-column');
+                column.style.left = `${Math.floor(Math.random() * width)}px`;
+                column.style.animationDuration = `${Math.random() * 5 + 3}s`;
+                
+                let content = '';
+                for (let j = 0; j < 20; j++) {
+                    content += (Math.random() > 0.5 ? '1' : '0') + '<br>';
+                }
+                column.innerHTML = content;
+                
+                container.appendChild(column);
+            }
+        }
+        
+        // Terminal typing effect
+        function terminalTypingEffect() {
+            const text = "Specializing in secure backend systems, database optimization, and network security. Let's build something secure together.";
+            const consoleText = document.getElementById('console-text');
+            let i = 0;
+            
+            function typeWriter() {
+                if (i < text.length) {
+                    consoleText.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, Math.random() * 50 + 30);
+                }
+            }
+            
+            typeWriter();
+        }
+        
+        // Terminal lines animation
+        function animateTerminalLines() {
+            const terminalLines = document.getElementById('terminal-lines');
+            const commands = [
+                'sudo apt update',
+                'npm install --save-dev',
+                'docker-compose up -d',
+                'ssh-keygen -t rsa',
+                'git push origin main',
+                'systemctl status nginx',
+                'netstat -tulpn',
+                'nmap -sV 192.168.1.1',
+                'kubectl get pods',
+                'openssl encrypt -aes-256-cbc'
+            ];
+            
+            let index = 0;
+            
+            function addLine() {
+                if (terminalLines) {
+                    const line = document.createElement('div');
+                    line.classList.add('mb-1');
+                    
+                    const prompt = document.createElement('span');
+                    prompt.classList.add('text-neon');
+                    prompt.textContent = '$ ';
+                    
+                    const command = document.createElement('span');
+                    command.textContent = commands[index % commands.length];
+                    
+                    line.appendChild(prompt);
+                    line.appendChild(command);
+                    
+                    terminalLines.appendChild(line);
+                    terminalLines.scrollTop = terminalLines.scrollHeight;
+                    
+                    // Keep only the last 4 lines
+                    if (terminalLines.children.length > 4) {
+                        terminalLines.removeChild(terminalLines.children[0]);
+                    }
+                    
+                    index++;
+                }
+                
+                setTimeout(addLine, Math.random() * 2000 + 1000);
+            }
+            
+            addLine();
+        }
+        
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Theme Toggle (Light/Dark)
+        const themeToggle = document.getElementById('theme-toggle');
+        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+        const html = document.documentElement;
+        
+        function toggleTheme() {
+            if (html.classList.contains('light')) {
+                html.classList.remove('light');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.classList.add('light');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        themeToggle.addEventListener('click', toggleTheme);
+        mobileThemeToggle.addEventListener('click', toggleTheme);
+        
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Contact Form Submission (Demo)
+        const contactForm = document.getElementById('contact-form');
+        
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            if (name && email && subject && message) {
+                alert('Message received. I will get back to you through secure channels.');
+                contactForm.reset();
+            } else {
+                alert('Please fill in all fields to establish a secure connection.');
+            }
+        });
+        
+        // Load More Projects Button (Demo)
+        const loadMoreButton = document.getElementById('load-more');
+        
+        loadMoreButton.addEventListener('click', () => {
+            loadMoreButton.innerHTML = '<span class="mr-2">$</span>loading...';
+            setTimeout(() => {
+                loadMoreButton.innerHTML = '<span class="mr-2">$</span>No more projects found';
+                loadMoreButton.disabled = true;
+                loadMoreButton.classList.add('opacity-50');
+            }, 1500);
+        });
+        
+        // Navigation active state
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            generateBinaryBackground();
+            terminalTypingEffect();
+            animateTerminalLines();
+            
+            // Regenerate binary on resize
+            window.addEventListener('resize', generateBinaryBackground);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965d986d34837eda',t:'MTc1MzYzNDYwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
